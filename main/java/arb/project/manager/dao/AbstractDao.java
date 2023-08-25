@@ -58,4 +58,8 @@ public abstract class AbstractDao<T> implements Dao {
 		}
 	}
 	
+	public EntityManager getEntityManager() {
+		return em;
+	}
+	
 }
