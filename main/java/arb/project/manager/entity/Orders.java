@@ -1,9 +1,12 @@
 package arb.project.manager.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,14 +34,14 @@ public class Orders {
 	private LocalDateTime date;
 	
 	@OneToMany(mappedBy = "order") // Relacion con la clase Albaran donde un pedido puede tener muchos albaranes
-	private List<DeliveryNote> deliveryNotes; // Lista para guardar los albaranes del pedido
+	private List<DeliveryNote> deliveryNotes = new ArrayList<>(); // Lista para guardar los albaranes del pedido
 	
-	@OneToOne
+	@OneToOne (cascade = CascadeType.ALL)
 	@JoinColumn
 	private OrderInvoice orderInvoice;
 	
-	@ManyToMany (mappedBy = "orders")
-	private Set<Product> products;
+	@ManyToMany (mappedBy = "orders", cascade = CascadeType.ALL)
+	private Set<Product> products = new HashSet<>();
 	
 	public Orders() {}
 	
@@ -78,6 +81,30 @@ public class Orders {
 	public void setDeliveryNote(List<DeliveryNote> deliveryNote) {
 		this.deliveryNotes = deliveryNote;
 	}
+	
+	public List<DeliveryNote> getDeliveryNotes() {
+		return deliveryNotes;
+	}
+
+	public void setDeliveryNotes(List<DeliveryNote> deliveryNotes) {
+		this.deliveryNotes = deliveryNotes;
+	}
+
+	public OrderInvoice getOrderInvoice() {
+		return orderInvoice;
+	}
+
+	public void setOrderInvoice(OrderInvoice orderInvoice) {
+		this.orderInvoice = orderInvoice;
+	}
+
+	public Set<Product> getProducts() {
+		return products;
+	}
+
+//	public void setProducts(Set<Product> products) {
+//		this.products = products;
+//	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -91,6 +118,9 @@ public class Orders {
 	 */
 	public void addProduct(Product product) {
 		products.add(product);
+		if (!product.getOrders().contains(this)) {
+			product.addOrder(this);
+		}
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package arb.project.manager.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,13 +21,13 @@ public class Product {
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column (unique = true)
+	@Column
 	private String reference;
 	
 	private String description;
 	
 	@ManyToMany
-	private Set<Orders> orders;
+	private Set<Orders> orders = new HashSet<Orders>();
 	
 	// Constructores
 	
@@ -63,12 +64,27 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public Set<Orders> getOrders() {
+		return orders;
+	}
+
+//	public void setOrders(Set<Orders> orders) {
+//		this.orders = orders;
+//	}
+	
+	public void addOrder(Orders order) {
+		orders.add(order);
+		if (!order.getProducts().contains(this)) {
+			order.addProduct(this);
+		}
+	}
 
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", reference=" + reference + ", description=" + description + "]";
 	}
-	
+
 	
 	
 }
