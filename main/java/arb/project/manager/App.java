@@ -29,6 +29,10 @@ public class App
     	Orders mostRecent = ordersDao.mostRecentOrder();
     	System.out.println("*** Pedido más reciente: " + mostRecent);
     	
+    	// Pedido mas reciente
+    	Orders mostRecentCriteria = ordersDao.mostRecentOrderCriteria();
+    	System.out.println("*** Pedido más reciente utilizando CRITERIA: " + mostRecentCriteria);
+    	
     	System.out.println("-------------------------------------------------------------------");
     	
     	// Pedido de hace justo una semana
